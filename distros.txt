@@ -1,0 +1,2 @@
+fedora server latest
+fedora workstation latest
