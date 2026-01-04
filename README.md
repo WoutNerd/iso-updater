@@ -202,4 +202,8 @@ fedora server latest
 2. Implement a single function:
 
 ```pyt
+def resolve_urls(args) -> list[str]:
+...
 ```
+3. Add a corresponding line to `distros.txt`
+The main script automatically loads the new handler.
