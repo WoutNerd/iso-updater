@@ -78,6 +78,22 @@ fedora server latest
 
 ---
 
+## Supported distros
+
+### Ubuntu
+
+Supports Ubuntu server and dektop on channels lts and latest.
+
+### Fedora
+
+Supports Fedora workstation, kde and server on channel latest.
+
+### Debian
+
+Supports Debian on channal stable
+
+---
+
 ## How to Use
 
 ### Clone the repository
