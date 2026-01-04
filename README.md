@@ -83,7 +83,7 @@ fedora server latest
 ### Clone the repository
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/WoutNerd/iso-updater
 cd iso-updater
 ```
 
