@@ -1,2 +1,3 @@
-fedora server latest
-fedora workstation latest
+# Add your distro below
+# <distro> <variant> <channel>
+# eg: fedora workstation latest
