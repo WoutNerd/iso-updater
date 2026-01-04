@@ -82,7 +82,7 @@ fedora server latest
 
 ### Ubuntu
 
-Supports Ubuntu server and dektop on channels lts and latest.
+Supports Ubuntu server and dektop and all the official flavors on channels lts and latest.
 
 ### Fedora
 
