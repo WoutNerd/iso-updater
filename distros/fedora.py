@@ -5,6 +5,7 @@ BASE_URL = "https://download.fedoraproject.org/pub/fedora/linux/releases/"
 
 def get_latest_release():
     r = requests.get(BASE_URL)
+    r.raise_for_status()
     soup = BeautifulSoup(r.text, "html.parser")
 
     versions = []
@@ -18,21 +19,20 @@ def get_latest_release():
 
     return max(versions)
 
-def find_iso(iso_dir, required_tokens):
-    r = requests.get(iso_dir)
+def find_file(base_dir, required_tokens, extensions):
+    r = requests.get(base_dir)
+    r.raise_for_status()
     soup = BeautifulSoup(r.text, "html.parser")
 
     for link in soup.find_all("a"):
         href = link.get("href", "")
-
         if (
-            href.startswith("Fedora-")
-            and href.endswith(".iso")
+            any(href.endswith(ext) for ext in extensions)
             and all(token in href for token in required_tokens)
         ):
-            return iso_dir + href
+            return base_dir + href
 
-    raise RuntimeError("ISO not found")
+    raise RuntimeError("File not found")
 
 def resolve_urls(args):
     if len(args) != 2:
@@ -45,15 +45,33 @@ def resolve_urls(args):
 
     release = get_latest_release()
 
+    # ------------------------
+    # Workstation
+    # ------------------------
     if variant == "workstation":
         iso_dir = f"{BASE_URL}{release}/Workstation/x86_64/iso/"
         tokens = ["Workstation", "Live", "x86_64"]
+        exts = [".iso"]
 
+    # ------------------------
+    # Server
+    # ------------------------
     elif variant == "server":
         iso_dir = f"{BASE_URL}{release}/Server/x86_64/iso/"
         tokens = ["Server", "dvd", "x86_64"]
+        exts = [".iso"]
+
+    # ------------------------
+    # KDE Spin
+    # ------------------------
+    elif variant == "kde":
+        iso_dir = f"{BASE_URL}{release}/Spins/x86_64/iso/"
+        tokens = ["KDE", "Live", "x86_64"]
+        exts = [".iso"]
 
     else:
-        raise ValueError("Variant must be workstation or server")
+        raise ValueError(
+            "Variant must be: workstation, server, kde, iot, cloud, or coreos"
+        )
 
-    return [find_iso(iso_dir, tokens)]
+    return [find_file(iso_dir, tokens, exts)]
