@@ -143,6 +143,18 @@ def resolve_lts_release(flavor, variant):
 
     raise RuntimeError(f"No LTS ISO available for {flavor}")
 
+def resolve_latest_release(flavor, variant):
+    if flavor == "ubuntu":
+        return find_latest_ga("ubuntu")
+
+    # Iterate Ubuntu releases newest → oldest
+    for r in get_ga_releases("ubuntu"):
+        if flavor_has_iso(flavor, r["version"], variant):
+            return r["version"]
+
+    raise RuntimeError(f"No GA ISO available for {flavor}")
+
+
 def find_latest_ga(flavor="ubuntu"):
     releases = get_ga_releases(flavor)
     if not releases:
@@ -190,7 +202,8 @@ def resolve_urls(args):
     if channel == "lts":
         release = resolve_lts_release(flavor, variant)
     else:
-        release = find_latest_ga(flavor)
+        release = resolve_latest_release(flavor, variant)
+
 
     url = get_release_dir(flavor, release)
     r = requests.get(url)
